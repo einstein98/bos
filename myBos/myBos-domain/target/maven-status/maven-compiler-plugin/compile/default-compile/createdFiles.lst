@@ -1,0 +1,6 @@
+com\heima\domain\Standard.class
+com\heima\domain\Staff.class
+com\heima\domain\User.class
+com\heima\domain\DecidedZone.class
+com\heima\domain\Region.class
+com\heima\domain\Subarea.class

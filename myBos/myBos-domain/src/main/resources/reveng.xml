@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+<!--  定义生成实体类规范  match-table 需要将那些表生成实体类   match-catalog 操作是哪一个数据库 -->
+  <schema-selection  match-table="t_user"  match-catalog="mybos"/>
+  <schema-selection  match-table="t_standard"  match-catalog="mybos"/>
+  <!-- 正则表达式 .表示任意字符 * 0或者多个字符 -->
+  <schema-selection  match-table="bc_.*"  match-catalog="mybos"/>
+  <!-- 反向生成Customer -->
+<!--   <schema-selection  match-table="customers"  match-catalog="mybos"/>
+  <schema-selection  match-table="qp_.*"  match-catalog="mybos"/>
+  权限表生成
+  <schema-selection  match-table="auth_.*"  match-catalog="mybos"/>
+  <schema-selection  match-table="role_function"  match-catalog="mybos"/>
+  <schema-selection  match-table="role_menu"  match-catalog="mybos"/>
+  <schema-selection  match-table="user_role"  match-catalog="mybos"/>
+  <schema-selection  match-table="userinfo"  match-catalog="ssh_store"/>
+  <schema-selection  match-table="stores"  match-catalog="ssh_store"/>
+  <schema-selection  match-table="goods"  match-catalog="ssh_store"/> -->
+  <schema-selection  match-table="historys"  match-catalog="ssh_store"/>
+  
+<!--   <table name="userinfo" catalog="ssh_store"
+		class="domain.Userinfo">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+  <table name="stores" catalog="ssh_store"
+		class="domain.Store">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+  <table name="goods" catalog="ssh_store"
+		class="domain.Good">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+  <table name="historys" catalog="ssh_store"
+		class="domain.History">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table> -->
+  
+  
+  <!-- 实体类生成 -->
+<!--    <table name="auth_function" catalog="mybos"
+		class="cn.itcast.mybos.domain.auth.Function">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+	 <table name="auth_role" catalog="mybos"
+		class="cn.itcast.mybos.domain.auth.Role">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+	 <table name="auth_menu" catalog="mybos"
+		class="cn.itcast.mybos.domain.auth.Menu">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table> -->
+  
+  
+  <!-- 取派模块 -->
+<!--     <table name="qp_noticebill" catalog="mybos"
+		class="cn.itcast.mybos.domain.qp.NoticeBill">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+    <table name="qp_workbill" catalog="mybos"
+		class="cn.itcast.mybos.domain.qp.WorkBill">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+    <table name="qp_workordermanage" catalog="mybos"
+		class="cn.itcast.mybos.domain.qp.WorkOrderManage">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table> -->
+	
+	
+	
+  
+  <!-- 定义表具体规范  -->
+  <table name="bc_staff" catalog="mybos"
+		class="domain.Staff">
+		  <!-- 定义用户实体类注解 主键策略 -->
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+  <table name="bc_region" catalog="mybos"
+		class="domain.Region">
+		  <!-- 定义用户实体类注解 主键策略 -->
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+  <table name="bc_subarea" catalog="mybos"
+		class="domain.Subarea">
+		  <!-- 定义用户实体类注解 主键策略 -->
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+  <table name="bc_decidedzone" catalog="mybos"
+		class="domain.DecidedZone">
+		  <!-- 定义用户实体类注解 主键策略 -->
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+  
+  
+	<!-- <table name="customers" catalog="mybos"
+		class="cn.itcast.mavencrm.domain.Customer">
+	</table> -->
+	<table name="t_user" catalog="mybos"
+		class="domain.User">
+		  <!-- 定义用户实体类注解 主键策略 -->
+<!-- 		<primary-key> -->
+<!-- 			<generator class="uuid"></generator> -->
+<!-- 		</primary-key> -->
+	</table>
+  <!-- 定义收派标准表具体规范  -->
+	<table name="t_standard" catalog="mybos"
+		class="domain.Standard">
+		  <!-- 定义实体类注解 主键策略 -->
+<!-- 		<primary-key> -->
+<!-- 			<generator class="uuid"></generator> -->
+<!-- 		</primary-key> -->
+	</table>
+
+</hibernate-reverse-engineering>
