@@ -1,6 +1,0 @@
-com\heima\web\action\RegionAction.class
-com\heima\web\interceptor\UserExistsInterceptor.class
-com\heima\web\action\StaffAction.class
-com\heima\web\action\StandardAction.class
-com\heima\web\action\UserAction.class
-com\heima\web\action\BaseAction.class

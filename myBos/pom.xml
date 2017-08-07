@@ -101,11 +101,6 @@
 	  	</dependency>
 	  	<dependency>
 	  		<groupId>org.apache.struts</groupId>
-	  		<artifactId>struts2-json-plugin</artifactId>
-	  		<version>${struts2.version}</version>
-	  	</dependency>
-	  	<dependency>
-	  		<groupId>org.apache.struts</groupId>
 	  		<artifactId>struts2-spring-plugin</artifactId>
 	  		<version>${struts2.version}</version>
 	  	</dependency>
@@ -269,11 +264,11 @@
 	  			<version>2.2</version>
 	  			<configuration>
 	  				<components>
-	  					<!-- <component>
+	  					<component>
 	  						<name>hbm2hbmxml</name>
 	  						<implementation>jdbcconfiguration</implementation>
 	  						<outputDirectory>target/generated-resources/hibernate</outputDirectory>
-	  					</component> -->
+	  					</component>
 	  					<component>
 	  						<name>hbm2java</name>
 	  						<implementation>jdbcconfiguration</implementation>

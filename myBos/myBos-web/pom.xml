@@ -28,10 +28,6 @@
   	</dependency>
   	<dependency>
   		<groupId>org.apache.struts</groupId>
-  		<artifactId>struts2-json-plugin</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.struts</groupId>
   		<artifactId>struts2-convention-plugin</artifactId>
   	</dependency>
   	<dependency>
