@@ -10,11 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import com.alibaba.fastjson.JSON;
+import com.heima.service.FacadeService;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -23,9 +25,22 @@ import com.opensymphony.xwork2.ModelDriven;
  * @author 作者 Eins98
  * @version 创建时间：2017年8月7日 下午2:20:24
  */
+
 public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 
 	private static final long serialVersionUID = -2085264128153327912L;
+
+	private FacadeService service;
+
+	public FacadeService getService() {
+		return service;
+	}
+
+	@Autowired
+	public void setService(FacadeService service) {
+		this.service = service;
+	}
+
 	private T t;
 
 	@Override
@@ -66,6 +81,14 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 		ActionContext.getContext().getSession().remove(key);
 	}
 
+	public String getParameter(String key) {
+		return ServletActionContext.getRequest().getParameter(key);
+	}
+
+	public String[] getParameterValue(String key) {
+		return getRequest().getParameterValues(key);
+	}
+
 	public HttpServletRequest getRequest() {
 		return ServletActionContext.getRequest();
 	}
@@ -76,25 +99,20 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 
 	private int page;
 	private int rows;
-	private Page pageData;
 
 	public PageRequest getPageRequest(Sort sort) {
 		return new PageRequest(page, rows, sort);
 	}
 
 	public void setPage(int page) {
-		this.page = page;
+		this.page = page - 1;
 	}
 
 	public void setRows(int rows) {
 		this.rows = rows;
 	}
 
-	public void setPageData(Page pageData) {
-		this.pageData = pageData;
-	}
-
-	public Map<String, Object> getPageMap() {
+	public Map<String, Object> getPageMap(Page pageData) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("total", pageData.getTotalElements());
 		map.put("rows", pageData.getContent());
@@ -103,6 +121,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 
 	public void returnJson(Object obj) throws IOException {
 		String jsonString = JSON.toJSONString(obj);
+		getResponse().setContentType("text/json;charset=utf-8");
 		getResponse().getWriter().write(jsonString);
 	}
 

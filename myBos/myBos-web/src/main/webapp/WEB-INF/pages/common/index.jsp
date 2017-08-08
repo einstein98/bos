@@ -8,6 +8,8 @@
 <!-- 导入jquery核心类库 -->
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/js/jquery-1.8.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/js/jquery.form.min.js"></script>
 <!-- 导入easyui类库 -->
 <link id="easyuiTheme" rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath }/js/easyui/themes/default/easyui.css">
@@ -57,7 +59,7 @@
 		window.setTimeout(function(){
 			$.messager.show({
 				title:"消息提示",
-				msg:'欢迎登录，超级管理员！ <a href="javascript:void" onclick="top.showAbout();">联系管理员</a>',
+				msg:'欢迎登录，${sessionScope.current_user.email}！ <a href="javascript:void" onclick="top.showAbout();">联系管理员</a>',
 				timeout:5000
 			});
 		},3000);
@@ -68,8 +70,48 @@
 		});
 		
 		$("#btnEp").click(function(){
-			alert("修改密码");
+			if($('#changeCode').form('validate')) {
+				$('#changeCode').ajaxSubmit(function(){
+					$.messager.alert('成功','已经成功修改密码','info');
+					$('#editPwdWindow').window('close');
+					$('#changeCode').form('clear');
+				});
+			}
 		});
+		
+		$('#txtNewPass').validatebox({ 
+
+			required: true, 
+
+			validType: 'length[5,10]' 
+
+		}); 
+		
+		$('#txtRePass').validatebox({ 
+
+			required: true, 
+
+			validType: "equals['#txtNewPass']"
+
+		}); 
+		
+		$.extend($.fn.validatebox.defaults.rules, { 
+
+			equals: { 
+
+			validator: function(value,param){ 
+
+				return value == $(param[0]).val(); 
+
+			}, 
+
+			message: '两次输入的密码不同' 
+
+			} 
+
+		}); 
+
+
 	});
 
 	function onClick(event, treeId, treeNode, clickFlag) {
@@ -118,7 +160,7 @@
 		$.messager
 		.confirm('系统提示','您确定要退出本次登录吗?',function(isConfirm) {
 			if (isConfirm) {
-				location.href = '${pageContext.request.contextPath }/login.jsp';
+				location.href = '${pageContext.request.contextPath }/user_logout';
 			}
 		});
 	}
@@ -130,6 +172,9 @@
 	function showAbout(){
 		$.messager.alert("宅急送 v1.0","设计: yuyang<br/> 管理员邮箱: yuyang@itcast.cn <br/> QQ: 117038615");
 	}
+
+		
+
 </script>
 </head>
 <body class="easyui-layout">
@@ -141,7 +186,7 @@
 		</div>
 		<div id="sessionInfoDiv"
 			style="position: absolute;right: 5px;top:10px;">
-			[<strong>超级管理员</strong>]，欢迎你！您使用[<strong>192.168.1.100</strong>]IP登录！
+			[<strong>${sessionScope.current_user.email }</strong>]，欢迎你！您使用[<strong>${pageContext.request.remoteAddr }</strong>]IP登录！
 		</div>
 		<div style="position: absolute; right: 5px; bottom: 10px; ">
 			<a href="javascript:void(0);" class="easyui-menubutton"
@@ -207,17 +252,19 @@
         maximizable="false" icon="icon-save"  style="width: 300px; height: 160px; padding: 5px;
         background: #fafafa">
         <div class="easyui-layout" fit="true">
-            <div region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;">
+            <div region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;" >
+        <form action="${pageContext.request.contextPath }/user_changePassword" method="post" id="changeCode">
                 <table cellpadding=3>
                     <tr>
                         <td>新密码：</td>
-                        <td><input id="txtNewPass" type="Password" class="txt01" /></td>
+                        <td><input id="txtNewPass" type="Password" class="txt01" name="password"/></td>
                     </tr>
                     <tr>
                         <td>确认密码：</td>
                         <td><input id="txtRePass" type="Password" class="txt01" /></td>
                     </tr>
                 </table>
+   </form>
             </div>
             <div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
                 <a id="btnEp" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" >确定</a> 

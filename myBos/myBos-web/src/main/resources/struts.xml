@@ -11,9 +11,31 @@
 	<!-- 国际化文件 -->
 	<constant name="struts.custom.i18n.resources" value="messages" />
 	<!-- 动态方法调用 -->
-	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<!-- <constant name="struts.enable.DynamicMethodInvocation" value="true" /> -->
 
 	<package name="default" extends="struts-default">
+		<result-types>
+			<result-type name="fastJson" class="com.heima.web.result.FastJsonResult"></result-type>
+		</result-types>
+		
+		<interceptors>
+			<interceptor name="userExistsInterceptor" class="com.heima.web.interceptor.UserExistsInterceptor"></interceptor>
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="userExistsInterceptor">
+					<param name="excludeMethods">login,checkcode</param>
+				</interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		
+		<!-- <default-interceptor-ref name="myStack"></default-interceptor-ref> -->
+		
+		<global-results>
+			<result name="toJson" type="fastJson"></result>
+			<result name="no_user" type="dispatcher">/login.jsp</result>
+		</global-results>
+		
+		
 		<action name="index">
 			<result>/index.jsp</result>
 		</action>

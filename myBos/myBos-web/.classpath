@@ -33,5 +33,11 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/myBos-dao"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/myBos-domain"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/myBos-exception"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/myBos-redis"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/myBos-service"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/myBos-utils"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

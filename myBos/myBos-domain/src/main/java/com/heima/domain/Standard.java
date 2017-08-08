@@ -25,12 +25,20 @@ public class Standard implements java.io.Serializable {
 	private String name;
 	private Integer minweight;
 	private Integer maxweight;
+
+	@Override
+	public String toString() {
+		return "Standard [id=" + id + ", name=" + name + ", minweight=" + minweight + ", maxweight=" + maxweight
+				+ ", minlength=" + minlength + ", maxlength=" + maxlength + ", operationtime=" + operationtime
+				+ ", operator=" + operator + ", operatorcompany=" + operatorcompany + ", deltag=" + deltag + "]";
+	}
+
 	private Integer minlength;
 	private Integer maxlength;
 	private Date operationtime;
 	private String operator;
 	private String operatorcompany;
-	private Integer deltag;
+	private Integer deltag = 1;
 
 	public Standard() {
 	}

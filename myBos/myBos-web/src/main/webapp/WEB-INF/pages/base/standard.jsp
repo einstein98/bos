@@ -10,6 +10,8 @@
 		<!-- 导入jquery核心类库 -->
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/js/jquery-1.8.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/js/jquery.form.min.js"></script>
 <!-- 导入easyui类库 -->
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath }/js/easyui/themes/default/easyui.css">
@@ -43,26 +45,36 @@
 					pageList: [30,50,100],
 					pagination : true,
 					toolbar : toolbar,
-					url : "../../data/standard.json",
+					url : "${pageContext.request.contextPath}/standard_getPage",
 					idField : 'id',
-					columns : columns
+					columns : columns,
+					onDblClickRow : onDblClickRow
 				});
 				// 添加取派员窗口
-				$('#addStaffWindow').window({
+				$('#updateStaffWindow').window({
 			        title: '取派员操作',
-			        width: 600,
+			        width: 500,
 			        modal: true,
 			        shadow: true,
 			        closed: true,
-			        height: 400,
+			        height: 350,
 			        resizable:false,
 			        onBeforeClose:function(){
 			        	//   清除form 表单数据 尤其  隐藏id 一定要清除  reset   jquery --->Dom
-			        	  $("#addStaffForm")[0].reset();//  text  
-			        	 $("#tel").removeClass('validatebox-invalid');  
-			             $("#id").val("");  //  一定将隐藏id 值清除 // hidden
+			        	  $('#grid').datagrid('reload');
+			        	  $("#updateStandardForm").form('clear');//  text  
+			        	  $("#grid").datagrid('clearSelections');
+			        	  $('#deltag').val('1');
 			        }
 			    });
+				
+				$('#save').click(function() {
+					$('#updateStandardForm').ajaxSubmit(function(){
+						$('#updateStaffWindow').window('close');
+						$.messager.alert('成功','操作成功','info');	
+					
+					});
+				});
 			});	
 			
 			//工具栏
@@ -71,28 +83,63 @@
 				text : '增加',
 				iconCls : 'icon-add',
 				handler : function(){
-					$('#addStaffWindow').window("open");
+					$('#updateStaffWindow').window("open");
 				}
 			}, {
 				id : 'button-edit',
 				text : '修改',
 				iconCls : 'icon-edit',
 				handler : function(){
-					alert('修改');
+					var selections = $('#grid').datagrid('getSelections');
+					if(selections.length<1) {
+						$.messager.alert('错误','请先选择需要修改的数据','error');
+					}else if(selections.length>1) {
+						$.messager.alert('错误','只能同时修改一条数据','error');
+					}else {
+						
+						$('#updateStandardForm').form('load',selections[0]);
+						$('#updateStaffWindow').window("open");
+					}
 				}
 			},{
 				id : 'button-delete',
 				text : '作废',
 				iconCls : 'icon-cancel',
 				handler : function(){
-					alert('作废');
+					var selections = $('#grid').datagrid('getSelections');
+					if(selections.length<1) {
+						$.messager.alert('错误','请先选择需要修改的数据','error');
+					}else {
+						var ids = new Array();
+						for(var i=0;i<selections.length;i++){
+							ids.push(selections[i].id);
+						}
+						var idStr = ids.join(',');
+						$.post('${pageContext.request.contextPath}/standart_batchDelete',{ids:idStr},function() {
+							$.messager.alert('成功','数据删除成功','info');
+							$('#grid').datagrid('reload');
+						})
+					}
 				}
 			},{
 				id : 'button-restore',
 				text : '还原',
 				iconCls : 'icon-save',
 				handler : function(){
-					alert('还原');
+					var selections = $('#grid').datagrid('getSelections');
+					if(selections.length<1) {
+						$.messager.alert('错误','请先选择需要修改的数据','error');
+					}else {
+						var ids = new Array();
+						for(var i=0;i<selections.length;i++){
+							ids.push(selections[i].id);
+						}
+						var idStr = ids.join(',');
+						$.post('${pageContext.request.contextPath}/standart_batchRevert',{ids:idStr},function() {
+							$.messager.alert('成功','数据还原成功','info');
+							$('#grid').datagrid('reload');
+						})
+					}
 				}
 			}];
 			
@@ -106,22 +153,22 @@
 				width : 120,
 				align : 'center'
 			}, {
-				field : 'minWeight',
+				field : 'minweight',
 				title : '最小重量',
 				width : 120,
 				align : 'center'
 			}, {
-				field : 'maxWeight',
+				field : 'maxweight',
 				title : '最大重量',
 				width : 120,
 				align : 'center'
 			}, {
-				field : 'minLength',
+				field : 'minlength',
 				title : '最小长度',
 				width : 120,
 				align : 'center'
 			}, {
-				field : 'maxLength',
+				field : 'maxlength',
 				title : '最大长度',
 				width : 120,
 				align : 'center'
@@ -131,16 +178,33 @@
 				width : 120,
 				align : 'center'
 			}, {
-				field : 'operatingTime',
+				field : 'operationtime',
 				title : '操作时间',
 				width : 120,
 				align : 'center'
 			}, {
-				field : 'company',
+				field : 'operatorcompany',
 				title : '操作单位',
 				width : 120,
 				align : 'center'
+			}, {
+				field : 'deltag',
+				title : '是否有效',
+				width : 120,
+				align : 'center',
+				formatter: function(value,row,index){
+			         if (value=='1'){
+			            return '有效';
+			         } else {
+			            return '作废';
+			         }  			
+			    }  
 			} ] ];
+			
+			function onDblClickRow(rowIndex,rowData) {
+				$('#updateStandardForm').form('load',rowData);
+				$('#updateStaffWindow').window("open");
+			}
 		</script>
 	</head>
 
@@ -149,7 +213,7 @@
 			<table id="grid"></table>
 		</div>
 		<!-- 添加取派员窗体  -->
-	<div class="easyui-window" title="对收派员进行添加或者修改" id="addStaffWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
+	<div class="easyui-window" title="对收派员进行添加或者修改" id="updateStaffWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 		<div region="north" style="height:31px;overflow:hidden;" split="false" border="false" >
 			<div class="datagrid-toolbar">
 				<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
@@ -157,38 +221,36 @@
 		</div>
 		
 		<div region="center" style="overflow:auto;padding:5px;" border="false">
-			<form id="addStaffForm" method="post" action="${pageContext.request.contextPath }/bc/staffAction_save">
+			<form id="updateStandardForm" method="post" action="${pageContext.request.contextPath }/standard_updateStandard">
+				
+				<input type='hidden' name='id'>
+				<input type='hidden' name='deltag' value='1' id='deltag'>
+				
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
-						<td colspan="2">收派员信息</td>
+						<td colspan="2">收派标准信息</td>
 					</tr>
 					<tr>
-						<td>姓名</td>
+						<td>收派标准名称</td>
 						<td>
-						<input type="hidden" name="id" id="id"/>
 						<input type="text" name="name" class="easyui-validatebox" data-options="required:true"/></td>
 					</tr>
 					<tr>
-						<td>手机</td>
-						<td><input id="tel" type="text" name="telephone" class="easyui-validatebox" 
-						   data-options="required:true,validType:['telephone','uniquePhone']"/>
-						   <span id="tel_sp"></span>
+						<td>最小重量</td>
+						<td><input type="text" name="minweight" class="easyui-validatebox easyui-numberbox" required="true" data-options="min:1,precision:0,suffix:'KG'"/>
 						   </td>
 					</tr>
 					<tr>
-						<td>单位</td>
-						<td><input type="text" name="station" class="easyui-validatebox" required="true"/></td>
+						<td>最大重量</td>
+						<td><input type="text" name="maxweight" class="easyui-validatebox easyui-numberbox" required="true" data-options="min:1,precision:0,suffix:'KG'"/></td>
 					</tr>
 					<tr>
-						<td colspan="2">
-						<input type="checkbox" name="haspda" value="1" />
-						是否有PDA</td>
+						<td>最小长度</td>
+						<td><input type="text" name="minlength" class="easyui-validatebox easyui-numberbox" required="true" data-options="min:1,precision:0,suffix:'CM'"/></td>
 					</tr>
 					<tr>
-						<td>取派标准</td>
-						<td>
-							<input type="text" name="standard" class="easyui-validatebox" required="true"/>  
-						</td>
+						<td>最大长度</td>
+						<td><input type="text" name="maxlength" class="easyui-validatebox easyui-numberbox" required="true" data-options="min:1,precision:0,suffix:'CM'"/></td>
 					</tr>
 					</table>
 			</form>
