@@ -29,6 +29,8 @@ public class FastJsonResult implements Result {
 	 */
 	private String dateFormat;
 	private final String DEFAULT_DATA_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	private Set<String> includeProperties;
+	private Set<String> excludeProperties;
 
 	public String getDateFormat() {
 		return dateFormat;
@@ -37,9 +39,6 @@ public class FastJsonResult implements Result {
 	public void setDateFormat(String dateFormat) {
 		this.dateFormat = dateFormat;
 	}
-
-	private Set<String> includeProperties;
-	private Set<String> excludeProperties;
 
 	public Set<String> getExcludePropertiesList() {
 		return this.excludeProperties;
@@ -87,7 +86,8 @@ public class FastJsonResult implements Result {
 				dateFormat = DEFAULT_DATA_FORMAT;
 			}
 			JSON.DEFFAULT_DATE_FORMAT = dateFormat;
-			String jsonString = JSON.toJSONString(rootObject, filter, SerializerFeature.WriteDateUseDateFormat);
+			String jsonString = JSON.toJSONString(rootObject, filter, SerializerFeature.WriteDateUseDateFormat,
+					SerializerFeature.DisableCircularReferenceDetect);
 			response.getWriter().write(jsonString);
 		}
 	}

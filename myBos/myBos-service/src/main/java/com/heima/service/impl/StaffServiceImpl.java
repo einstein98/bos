@@ -106,4 +106,9 @@ public class StaffServiceImpl implements StaffService {
 			staffDao.logicRevert(id);
 		}
 	}
+
+	@Override
+	public List<Staff> getStaffList() {
+		return staffDao.getStaffList();
+	}
 }

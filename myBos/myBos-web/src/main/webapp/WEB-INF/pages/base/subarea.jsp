@@ -10,6 +10,8 @@
 	src="${pageContext.request.contextPath }/js/jquery-1.8.3.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/js/jquery.form.min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/js/serializeJson.js"></script>
 <!-- 导入easyui类库 -->
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath }/js/easyui/themes/default/easyui.css">
@@ -284,7 +286,7 @@
 	        resizable:false
 	    });
 		$("#btn").click(function(){
-			$('#grid').datagrid('load',{params:$('#searchSubareaForm').serialize()});
+			$('#grid').datagrid('load',$('#searchSubareaForm').serializeJson());
 			$('#searchWindow').window('close');
 		});
 		
@@ -432,15 +434,15 @@
 					</tr>
 					<tr>
 						<td>省</td>
-						<td><input type="text" name="province" class="easyui-validatebox" required="true"/></td>
+						<td><input type="text" name="region.province" class="easyui-validatebox" required="true"/></td>
 					</tr>
 					<tr>
 						<td>市</td>
-						<td><input type="text" name="city" class="easyui-validatebox" required="true"/></td>
+						<td><input type="text" name="region.city" class="easyui-validatebox" required="true"/></td>
 					</tr>
 					<tr>
 						<td>区（县）</td>
-						<td><input type="text" name="district" class="easyui-validatebox" required="true"/></td>
+						<td><input type="text" name="region.district" class="easyui-validatebox" required="true"/></td>
 					</tr>
 					<tr>
 						<td>定区编码</td>

@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -28,6 +29,11 @@ public class Subarea implements java.io.Serializable {
 	private String position;
 
 	public Subarea() {
+	}
+
+	@Transient
+	public String getSubareaId() {
+		return this.id;
 	}
 
 	public Subarea(Region region, DecidedZone decidedZone, String addresskey, String startnum, String endnum,

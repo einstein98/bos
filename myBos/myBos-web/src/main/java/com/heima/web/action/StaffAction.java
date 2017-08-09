@@ -1,8 +1,11 @@
 package com.heima.web.action;
 
+import java.util.List;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
@@ -45,6 +48,14 @@ public class StaffAction extends BaseAction<Staff> {
 		Order id = new Order(Direction.DESC, "id");
 		Page pageData = getService().getStaffService().getPage(getPageRequest(deltag, id), params);
 		push(getPageMap(pageData));
+		return "toJson";
+	}
+
+	@Action(value = "staff_getStaffList", results = @Result(name = "toJson", type = "fastJson", params = {
+			"includeProperties", "id,name" }))
+	public String getStaffList() throws Exception {
+		List<Staff> staff = getService().getStaffService().getStaffList();
+		push(staff);
 		return "toJson";
 	}
 

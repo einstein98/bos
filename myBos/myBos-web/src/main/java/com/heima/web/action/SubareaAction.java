@@ -1,9 +1,12 @@
 package com.heima.web.action;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -44,9 +47,17 @@ public class SubareaAction extends BaseAction<Subarea> {
 
 	@Action("subarea_getPage")
 	public String getPage() throws Exception {
-		String pageInJson = getService().getSubareaService().getPage(params, getPageRequest());
+		String pageInJson = getService().getSubareaService().getPage(getModel(), getPageRequest());
 		writeJsonOut(pageInJson);
 		return NONE;
+	}
+
+	@Action(value = "subarea_getSubareaList", results = @Result(name = "toJson", type = "fastJson", params = {
+			"includeProperties", "subareaId,addresskey,position" }))
+	public String getSubareaList() throws Exception {
+		List<Subarea> list = getService().getSubareaService().getSubareaList();
+		push(list);
+		return "toJson";
 	}
 
 }

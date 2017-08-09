@@ -1,5 +1,6 @@
 package com.heima.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -22,5 +23,7 @@ public interface StaffService {
 	void batchDelete(String ids);
 
 	void batchRevert(String ids);
+
+	List<Staff> getStaffList();
 
 }

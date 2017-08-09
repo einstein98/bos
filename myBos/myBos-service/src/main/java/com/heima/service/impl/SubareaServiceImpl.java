@@ -2,10 +2,12 @@ package com.heima.service.impl;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.heima.dao.SubareaDao;
+import com.heima.domain.Region;
 import com.heima.domain.Subarea;
 import com.heima.service.SubareaService;
 import com.heima.utils.MyUtils;
@@ -83,50 +86,60 @@ public class SubareaServiceImpl implements SubareaService {
 	}
 
 	@Override
-	public String getPage(Map<String, String> params, PageRequest pageRequest) {
+	public String getPage(Subarea subarea, PageRequest pageRequest) {
 		String key = "subarea-" + pageRequest.getPageNumber() + "-" + pageRequest.getPageSize();
 		// 封装查询条件
 		Specification<Subarea> spec = new Specification<Subarea>() {
 			@Override
 			public Predicate toPredicate(Root<Subarea> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> list = new LinkedList<>();
-				String addresskey = params.get("addresskey");
+				String addresskey = subarea.getAddresskey();
 				if (MyUtils.isNotBlank(addresskey)) {
 					list.add(cb.equal(root.get("addresskey").as(String.class), addresskey));
 				}
-				String province = params.get("province");
-				if (MyUtils.isNotBlank(province)) {
-					list.add(cb.like(root.get("province").as(String.class), province));
-				}
-				String city = params.get("city");
-				if (MyUtils.isNotBlank(city)) {
-					list.add(cb.like(root.get("city").as(String.class), city));
-				}
-				String district = params.get("district");
-				if (MyUtils.isNotBlank(district)) {
-					list.add(cb.like(root.get("district").as(String.class), district));
-				}
+				Region region = subarea.getRegion();
+				if (region != null) {
+					String province = "%" + region.getProvince() + "%";
+					Join<Subarea, Region> join = root.join(root.getModel().getSingularAttribute("region", Region.class),
+							JoinType.INNER);
+					if (MyUtils.isNotBlank(province)) {
+						list.add(cb.like(join.get("province").as(String.class), province));
+					}
+					String city = "%" + region.getCity() + "%";
+					if (MyUtils.isNotBlank(city)) {
+						list.add(cb.like(join.get("city").as(String.class), city));
+					}
+					String district = "%" + region.getDistrict() + "%";
+					if (MyUtils.isNotBlank(district)) {
+						list.add(cb.like(join.get("district").as(String.class), district));
+					}
 
-				return cb.and(list.toArray(new Predicate[list.size()]));
+					return cb.and(list.toArray(new Predicate[list.size()]));
+				}
+				return null;
 			}
 		};
 
 		// 封装多条件key
-		String addresskey = params.get("addresskey");
+		String addresskey = subarea.getAddresskey();
 		if (MyUtils.isNotBlank(addresskey)) {
 			key = key + "_addresskey:" + addresskey;
 		}
-		String province = params.get("province");
-		if (MyUtils.isNotBlank(province)) {
-			key = key + "_province:" + province;
-		}
-		String city = params.get("city");
-		if (MyUtils.isNotBlank(city)) {
-			key = key + "_city:" + city;
-		}
-		String district = params.get("district");
-		if (MyUtils.isNotBlank(district)) {
-			key = key + "_district:" + district;
+		Region region = subarea.getRegion();
+
+		if (region != null) {
+			String province = region.getProvince();
+			if (MyUtils.isNotBlank(province)) {
+				key = key + "_province:" + province;
+			}
+			String city = region.getCity();
+			if (MyUtils.isNotBlank(city)) {
+				key = key + "_city:" + city;
+			}
+			String district = region.getDistrict();
+			if (MyUtils.isNotBlank(district)) {
+				key = key + "_district:" + district;
+			}
 		}
 		String result = template.opsForValue().get(key);
 		if (MyUtils.isNotBlank(result)) {
@@ -134,7 +147,12 @@ public class SubareaServiceImpl implements SubareaService {
 		}
 		Page<Subarea> page = subareaDao.findAll(spec, pageRequest);
 		String pageJson = MyUtils.getPageJson(page);
-		template.opsForValue().set(key, pageJson);
+		template.opsForValue().set(key, pageJson, 30, TimeUnit.MINUTES);
 		return pageJson;
+	}
+
+	@Override
+	public List<Subarea> getSubareaList() {
+		return subareaDao.getSubareaList();
 	}
 }

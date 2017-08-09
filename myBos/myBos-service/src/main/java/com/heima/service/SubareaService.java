@@ -1,6 +1,6 @@
 package com.heima.service;
 
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 
@@ -16,6 +16,8 @@ public interface SubareaService {
 
 	void updateSubarea(Subarea model);
 
-	String getPage(Map<String, String> params, PageRequest pageRequest);
+	String getPage(Subarea subarea, PageRequest pageRequest);
+
+	List<Subarea> getSubareaList();
 
 }

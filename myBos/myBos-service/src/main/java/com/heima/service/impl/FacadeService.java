@@ -3,6 +3,7 @@ package com.heima.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.heima.service.DecidedZoneService;
 import com.heima.service.RegionService;
 import com.heima.service.StaffService;
 import com.heima.service.StandardService;
@@ -20,7 +21,17 @@ public class FacadeService {
 	private StandardService standardService;
 	private StaffService staffService;
 	private RegionService regionService;
-	private SubareaService subarea;
+	private SubareaService subareaService;
+	private DecidedZoneService decidedZoneService;
+
+	public DecidedZoneService getDecidedZoneService() {
+		return decidedZoneService;
+	}
+
+	@Autowired
+	public void setDecidedZoneService(DecidedZoneService decidedZoneService) {
+		this.decidedZoneService = decidedZoneService;
+	}
 
 	public StaffService getStaffService() {
 		return staffService;
@@ -31,7 +42,7 @@ public class FacadeService {
 	}
 
 	public SubareaService getSubareaService() {
-		return subarea;
+		return subareaService;
 	}
 
 	@Autowired
@@ -46,7 +57,7 @@ public class FacadeService {
 
 	@Autowired
 	public void setSubareaService(SubareaService subarea) {
-		this.subarea = subarea;
+		this.subareaService = subarea;
 	}
 
 	public StandardService getStandardService() {

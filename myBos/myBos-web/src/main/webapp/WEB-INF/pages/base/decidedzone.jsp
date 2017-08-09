@@ -8,6 +8,8 @@
 <!-- 导入jquery核心类库 -->
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/js/jquery-1.8.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/js/jquery.form.min.js"></script>
 <!-- 导入easyui类库 -->
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath }/js/easyui/themes/default/easyui.css">
@@ -27,8 +29,9 @@
 	src="${pageContext.request.contextPath }/js/easyui/locale/easyui-lang-zh_CN.js"
 	type="text/javascript"></script>
 <script type="text/javascript">
+	var decidedZoneId;
 	function doAdd(){
-		$('#addDecidedzoneWindow').window("open");
+		$('#updateDecidedzoneWindow').window("open");
 	}
 	
 	function doEdit(){
@@ -125,14 +128,14 @@
 			pageList: [30,50,100],
 			pagination : true,
 			toolbar : toolbar,
-			url : "json/decidedzone.json",
+			url : "${pageContext.request.contextPath}/decidedzone_getPage",
 			idField : 'id',
 			columns : columns,
 			onDblClickRow : doDblClickRow
 		});
 		
 		// 添加、修改定区
-		$('#addDecidedzoneWindow').window({
+		$('#updateDecidedzoneWindow').window({
 	        title: '添加修改定区',
 	        width: 600,
 	        modal: true,
@@ -155,6 +158,43 @@
 		$("#btn").click(function(){
 			alert("执行查询...");
 		});
+		
+		$('#save').click(function() {
+			if($('#updateDecidedzoneForm').form('validate')) {
+				$('#updateDecidedzoneForm').ajaxSubmit(function() {
+					$.messager.alert('成功','数据更新成功','info');
+					$('#updateDecidedzoneWindow').window('close');
+					$('#grid').datagrid('clearSelections');
+					$('#grid').datagrid('reload');
+				});
+			}
+			
+		});
+		
+		$.extend($.fn.validatebox.defaults.rules, { 
+			decidedZoneId: { 
+				validator: function(value, param){ 
+					var flag;
+					$.ajax({
+						async:false,
+						data:{
+							newId:value,
+							oldId:decidedZoneId
+						},
+						url:'${pageContext.request.contextPath}/decidedZone_checkId',
+						type:'POST',
+						timeout:1000,
+						success:function(data) {
+							flag=data;
+						}
+					});
+					return flag; 
+				}, 
+				message: '该定区编号已经存在' 
+			} 
+		}); 
+
+
 		
 	});
 
@@ -267,7 +307,7 @@
 	</div>
 	
 	<!-- 添加 修改分区 -->
-	<div class="easyui-window" title="定区添加修改" id="addDecidedzoneWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
+	<div class="easyui-window" title="定区添加修改" id="updateDecidedzoneWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 		<div style="height:31px;overflow:hidden;" split="false" border="false" >
 			<div class="datagrid-toolbar">
 				<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
@@ -275,14 +315,14 @@
 		</div>
 		
 		<div style="overflow:auto;padding:5px;" border="false">
-			<form>
+			<form id="updateDecidedzoneForm" action="${pageContext.request.contextPath }/decidedZone_updateDecidedZone">
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
 						<td colspan="2">定区信息</td>
 					</tr>
 					<tr>
 						<td>定区编码</td>
-						<td><input type="text" name="id" class="easyui-validatebox" required="true"/></td>
+						<td><input type="text" name="id" class="easyui-validatebox" required="true" data-options="validType:'decidedZoneId'"/></td>
 					</tr>
 					<tr>
 						<td>定区名称</td>
@@ -291,17 +331,17 @@
 					<tr>
 						<td>选择负责人</td>
 						<td>
-							<input class="easyui-combobox" name="region.id"  
-    							data-options="valueField:'id',textField:'name',url:'json/standard.json'" />  
+							<input class="easyui-combobox" name="staff.id"  
+    							data-options="valueField:'id',textField:'name',url:'${pageContext.request.contextPath }/staff_getStaffList'" />  
 						</td>
 					</tr>
 					<tr height="300">
 						<td valign="top">关联分区</td>
 						<td>
-							<table id="subareaGrid"  class="easyui-datagrid" border="false" style="width:300px;height:300px" data-options="url:'json/decidedzone_subarea.json',fitColumns:true,singleSelect:false">
+							<table id="subareaGrid"  class="easyui-datagrid" border="false" style="width:300px;height:300px" data-options="url:'${pageContext.request.contextPath }/subarea_getSubareaList',fitColumns:true,singleSelect:false">
 								<thead>  
 							        <tr>  
-							            <th data-options="field:'id',width:30,checkbox:true">编号</th>  
+							            <th data-options="field:'subareaId',width:30,checkbox:true">编号</th>  
 							            <th data-options="field:'addresskey',width:150">关键字</th>  
 							            <th data-options="field:'position',width:200,align:'right'">位置</th>  
 							        </tr>  
