@@ -6,4 +6,15 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>myBos-utils</artifactId>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.belerweb</groupId>
+  		<artifactId>pinyin4j</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.heima.mybos</groupId>
+  		<artifactId>myBos-domain</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

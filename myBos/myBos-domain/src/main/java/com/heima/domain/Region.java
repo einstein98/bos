@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -29,6 +30,17 @@ public class Region implements java.io.Serializable {
 	private String shortcode;
 	private String citycode;
 	private Set<Subarea> subareas = new HashSet<Subarea>(0);
+
+	@Transient
+	public String getName() {
+		if (province != null && province.trim().length() != 0) {
+			if (province.equals(city)) {
+				return province + district;
+			}
+			return province + city + district;
+		}
+		return null;
+	}
 
 	public Region() {
 	}

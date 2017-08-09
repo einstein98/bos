@@ -1,5 +1,7 @@
 package com.heima.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,6 +55,12 @@ public class StandardServiceImpl implements StandardService {
 		for (String id : ids) {
 			standardDao.logicRevert(Integer.parseInt(id));
 		}
+	}
+
+	@Override
+	public List<Standard> standardList() {
+		List<Standard> list = standardDao.findAll();
+		return list;
 	}
 
 }

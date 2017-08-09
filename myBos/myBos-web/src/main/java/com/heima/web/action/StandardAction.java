@@ -1,13 +1,14 @@
 package com.heima.web.action;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
@@ -43,24 +44,32 @@ public class StandardAction extends BaseAction<Standard> {
 	public String getPage() throws Exception {
 		Order deltag = new Order(Direction.DESC, "deltag");
 		Order id = new Order(Direction.ASC, "id");
-		Page pageData = getService().getStandardService().getPage(getPageRequest(new Sort(deltag, id)));
+		Page pageData = getService().getStandardService().getPage(getPageRequest(deltag, id));
 		System.out.println(pageData.getContent());
 		push(getPageMap(pageData));
 		return "toJson";
 	}
 
-	@Action(value = "standart_batchDelete")
+	@Action(value = "standard_batchDelete")
 	public String batchDelete() throws Exception {
 		String ids = getParameter("ids");
 		getService().getStandardService().batchDelete(ids);
 		return NONE;
 	}
 
-	@Action(value = "standart_batchRevert")
+	@Action(value = "standard_batchRevert")
 	public String batchRevert() throws Exception {
 		String ids = getParameter("ids");
 		getService().getStandardService().batchRevert(ids);
 		return NONE;
+	}
+
+	@Action(value = "standard_standardList", results = @Result(name = "standardList", type = "fastJson", params = {
+			"includeProperties", "name" }))
+	public String standardList() throws Exception {
+		List<Standard> list = getService().getStandardService().standardList();
+		push(list);
+		return "standardList";
 	}
 
 }

@@ -59,27 +59,34 @@ input[type=password] {
 	$(function() {
 		$.extend($.fn.validatebox.defaults.rules, { 
 
-			checkcode: { 
-
-			validator: function(value, param){ 
-				var flag;
-				$.ajax({
-					async:false,
-					data:{
-						checkcode:value
-					},
-					url:'${pageContext.request.contextPath}/user_checkcode',
-					type:'POST',
-					timeout:1000,
-					success:function(data) {
-						flag=data;
+			len: { 
+				validator: function(value, param){ 
+					if(value.length == param[0]) {
+						return true;
 					}
-				});
-				return flag;
-
-			}, 
-
-			message: '验证码输入错误！' 
+					return false;
+				}, 
+				message: '验证码格式错误！' 
+			},
+			
+			checkcode: { 
+				validator: function(value, param){ 
+					var flag;
+					$.ajax({
+						async:false,
+						data:{
+							checkcode:value
+						},
+						url:'${pageContext.request.contextPath}/user_checkcode',
+						type:'POST',
+						timeout:1000,
+						success:function(data) {
+							flag=data;
+						}
+					});
+					return flag;
+				}, 
+				message: '验证码输入错误！' 
 
 			} 
 
@@ -129,7 +136,7 @@ input[type=password] {
 						<div id="codeInputLine" class="loginFormIpt showPlaceholder"
 							style="margin-left:0px;margin-top:-40px;width:50px;">
 							<input id="loginform:codeInput" class="loginFormTdIpt easyui-validatebox" type="text"
-								name="checkcode" title="请输入验证码" data-options="required:true,validType:['length[4,4]','checkcode']"/>
+								name="checkcode" title="请输入验证码" data-options="required:true,validType:['len[4]','checkcode']"/>
 							<img id="loginform:vCode" src="${pageContext.request.contextPath }/validatecode.jsp"
 								onclick="javascript:document.getElementById('loginform:vCode').src='${pageContext.request.contextPath }/validatecode.jsp?'+Math.random();" />
 						</div>

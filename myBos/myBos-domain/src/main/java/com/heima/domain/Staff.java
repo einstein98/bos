@@ -29,7 +29,7 @@ public class Staff implements java.io.Serializable {
 	private String name;
 	private String telephone;
 	private Integer haspda;
-	private Integer deltag;
+	private Integer deltag = 1;
 	private String station;
 	private String standard;
 	private Set<DecidedZone> decidedZones = new HashSet<DecidedZone>(0);

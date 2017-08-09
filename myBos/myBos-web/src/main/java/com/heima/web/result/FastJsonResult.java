@@ -21,6 +21,7 @@ import com.opensymphony.xwork2.util.ValueStack;
  * @version 创建时间：2017年8月7日 下午8:11:54
  */
 public class FastJsonResult implements Result {
+
 	private static final long serialVersionUID = -1132436264022678935L;
 	private String root;
 	/**

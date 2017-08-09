@@ -42,7 +42,7 @@
 					border : false,
 					rownumbers : true,
 					striped : true,
-					pageList: [30,50,100],
+					pageList: [2,4,8],
 					pagination : true,
 					toolbar : toolbar,
 					url : "${pageContext.request.contextPath}/standard_getPage",
@@ -51,7 +51,7 @@
 					onDblClickRow : onDblClickRow
 				});
 				// 添加取派员窗口
-				$('#updateStaffWindow').window({
+				$('#updateStandardWindow').window({
 			        title: '取派员操作',
 			        width: 500,
 			        modal: true,
@@ -70,7 +70,7 @@
 				
 				$('#save').click(function() {
 					$('#updateStandardForm').ajaxSubmit(function(){
-						$('#updateStaffWindow').window('close');
+						$('#updateStandardWindow').window('close');
 						$.messager.alert('成功','操作成功','info');	
 					
 					});
@@ -83,7 +83,7 @@
 				text : '增加',
 				iconCls : 'icon-add',
 				handler : function(){
-					$('#updateStaffWindow').window("open");
+					$('#updateStandardWindow').window("open");
 				}
 			}, {
 				id : 'button-edit',
@@ -98,7 +98,7 @@
 					}else {
 						
 						$('#updateStandardForm').form('load',selections[0]);
-						$('#updateStaffWindow').window("open");
+						$('#updateStandardWindow').window("open");
 					}
 				}
 			},{
@@ -108,14 +108,14 @@
 				handler : function(){
 					var selections = $('#grid').datagrid('getSelections');
 					if(selections.length<1) {
-						$.messager.alert('错误','请先选择需要修改的数据','error');
+						$.messager.alert('错误','请先选择需要删除的数据','error');
 					}else {
 						var ids = new Array();
 						for(var i=0;i<selections.length;i++){
 							ids.push(selections[i].id);
 						}
 						var idStr = ids.join(',');
-						$.post('${pageContext.request.contextPath}/standart_batchDelete',{ids:idStr},function() {
+						$.post('${pageContext.request.contextPath}/standard_batchDelete',{ids:idStr},function() {
 							$.messager.alert('成功','数据删除成功','info');
 							$('#grid').datagrid('reload');
 						})
@@ -128,14 +128,14 @@
 				handler : function(){
 					var selections = $('#grid').datagrid('getSelections');
 					if(selections.length<1) {
-						$.messager.alert('错误','请先选择需要修改的数据','error');
+						$.messager.alert('错误','请先选择需要还原的数据','error');
 					}else {
 						var ids = new Array();
 						for(var i=0;i<selections.length;i++){
 							ids.push(selections[i].id);
 						}
 						var idStr = ids.join(',');
-						$.post('${pageContext.request.contextPath}/standart_batchRevert',{ids:idStr},function() {
+						$.post('${pageContext.request.contextPath}/standard_batchRevert',{ids:idStr},function() {
 							$.messager.alert('成功','数据还原成功','info');
 							$('#grid').datagrid('reload');
 						})
@@ -203,7 +203,7 @@
 			
 			function onDblClickRow(rowIndex,rowData) {
 				$('#updateStandardForm').form('load',rowData);
-				$('#updateStaffWindow').window("open");
+				$('#updateStandardWindow').window("open");
 			}
 		</script>
 	</head>
@@ -213,7 +213,7 @@
 			<table id="grid"></table>
 		</div>
 		<!-- 添加取派员窗体  -->
-	<div class="easyui-window" title="对收派员进行添加或者修改" id="updateStaffWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
+	<div class="easyui-window" title="对收派员进行添加或者修改" id="updateStandardWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 		<div region="north" style="height:31px;overflow:hidden;" split="false" border="false" >
 			<div class="datagrid-toolbar">
 				<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>

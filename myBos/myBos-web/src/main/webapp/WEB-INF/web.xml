@@ -11,7 +11,8 @@
   	<param-value>
   		classpath:applicationContext-domain.xml,
   		classpath:applicationContext-service.xml,
-  		classpath:applicationContext-dao.xml
+  		classpath:applicationContext-dao.xml,
+  		classpath:applicationContext-redis.xml
   	</param-value>
   </context-param>	
   <!-- spring核心监听器 -->

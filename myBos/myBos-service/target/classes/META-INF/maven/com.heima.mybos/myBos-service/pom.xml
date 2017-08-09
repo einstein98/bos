@@ -24,6 +24,14 @@
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   	<dependency>
+  		<groupId>org.apache.poi</groupId>
+  		<artifactId>poi</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.poi</groupId>
+  		<artifactId>poi-ooxml</artifactId>
+  	</dependency>
+  	<dependency>
   		<groupId>com.heima.mybos</groupId>
   		<artifactId>myBos-utils</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
