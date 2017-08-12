@@ -1,7 +1,5 @@
 package com.heima.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -21,6 +19,6 @@ public interface StandardService {
 
 	void batchRevert(String ids);
 
-	List<Standard> standardList();
+	String standardList();
 
 }

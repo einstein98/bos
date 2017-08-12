@@ -50,16 +50,12 @@
 		}
 	}
 	
-	function doDelete(){
-		alert("删除...");
-	}
-	
 	function doSearch(){
 		$('#searchWindow').window("open");
 	}
 	
 	function doExport(){
-		alert("导出");
+		$('#searchSubareaForm').form('submit',{url:'${pageContext.request.contextPath}/subarea_export'});
 	}
 	
 	function doImport(){
@@ -82,11 +78,6 @@
 		text : '修改',
 		iconCls : 'icon-edit',
 		handler : doEdit
-	},{
-		id : 'button-delete',
-		text : '删除',
-		iconCls : 'icon-cancel',
-		handler : doDelete
 	},{
 		id : 'button-import',
 		text : '导入',
@@ -434,23 +425,23 @@
 					</tr>
 					<tr>
 						<td>省</td>
-						<td><input type="text" name="region.province" class="easyui-validatebox" required="true"/></td>
+						<td><input type="text" name="region.province"/></td>
 					</tr>
 					<tr>
 						<td>市</td>
-						<td><input type="text" name="region.city" class="easyui-validatebox" required="true"/></td>
+						<td><input type="text" name="region.city"/></td>
 					</tr>
 					<tr>
 						<td>区（县）</td>
-						<td><input type="text" name="region.district" class="easyui-validatebox" required="true"/></td>
+						<td><input type="text" name="region.district"/></td>
 					</tr>
 					<tr>
 						<td>定区编码</td>
-						<td><input type="text" name="decidedzoneId" class="easyui-validatebox" required="true"/></td>
+						<td><input type="text" name="decidedZone.id"/></td>
 					</tr>
 					<tr>
 						<td>关键字</td>
-						<td><input type="text" name="addresskey" class="easyui-validatebox" required="true"/></td>
+						<td><input type="text" name="addresskey"/></td>
 					</tr>
 					<tr>
 						<td colspan="2"><a id="btn" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a> </td>

@@ -2,7 +2,12 @@ package com.heima.web.action;
 
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -12,6 +17,7 @@ import org.springframework.stereotype.Controller;
 
 import com.heima.domain.Region;
 import com.heima.domain.Subarea;
+import com.heima.utils.DownloadUtils;
 
 /**
  * @author 作者 Eins98
@@ -49,6 +55,19 @@ public class SubareaAction extends BaseAction<Subarea> {
 	public String getPage() throws Exception {
 		String pageInJson = getService().getSubareaService().getPage(getModel(), getPageRequest());
 		writeJsonOut(pageInJson);
+		return NONE;
+	}
+
+	@Action("subarea_export")
+	public String export() throws Exception {
+		HSSFWorkbook book = getService().getSubareaService().export(getModel());
+		HttpServletResponse response = getResponse();
+		response.setContentType(ServletActionContext.getServletContext().getMimeType(".xls"));
+		response.setHeader("Content-Disposition", "attachment;filename="
+				+ DownloadUtils.encodeDownloadFilename("分区表.xls", getRequest().getHeader("user-agent")));
+		ServletOutputStream outputStream = response.getOutputStream();
+		book.write(outputStream);
+		outputStream.close();
 		return NONE;
 	}
 

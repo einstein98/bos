@@ -19,12 +19,9 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +32,7 @@ import com.heima.service.RegionService;
 import com.heima.utils.FastJSONUtils;
 import com.heima.utils.MyUtils;
 import com.heima.utils.PinYin4jUtils;
+import com.heima.utils.RedisUtils;
 
 /**
  * @author 作者 Eins98
@@ -136,12 +134,7 @@ public class RegionServiceImpl implements RegionService {
 
 	@Override
 	public void updateRegion(Region model) {
-		redis.execute(new RedisCallback() {
-			public String doInRedis(RedisConnection connection) throws DataAccessException {
-				connection.flushDb();
-				return "ok";
-			}
-		});
+		RedisUtils.clearRedisCache(redis);
 		regionDao.save(model);
 	}
 

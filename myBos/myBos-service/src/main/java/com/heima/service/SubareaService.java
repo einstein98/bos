@@ -2,6 +2,7 @@ package com.heima.service;
 
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.data.domain.PageRequest;
 
 import com.heima.domain.Subarea;
@@ -19,5 +20,7 @@ public interface SubareaService {
 	String getPage(Subarea subarea, PageRequest pageRequest);
 
 	List<Subarea> getSubareaList();
+
+	HSSFWorkbook export(Subarea subarea);
 
 }

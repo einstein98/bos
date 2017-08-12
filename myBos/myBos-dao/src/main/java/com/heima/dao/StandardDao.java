@@ -1,5 +1,7 @@
 package com.heima.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,5 +20,8 @@ public interface StandardDao extends JpaRepository<Standard, Integer> {
 	@Query("update Standard set deltag=1 where id=?1")
 	@Modifying
 	void logicRevert(int parseInt);
+
+	@Query("from Standard where deltag = 1")
+	List<Standard> getAvailableStandardList();
 
 }

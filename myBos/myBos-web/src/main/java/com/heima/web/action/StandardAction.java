@@ -1,12 +1,10 @@
 package com.heima.web.action;
 
 import java.util.Date;
-import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
-import org.apache.struts2.convention.annotation.Result;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
@@ -64,12 +62,11 @@ public class StandardAction extends BaseAction<Standard> {
 		return NONE;
 	}
 
-	@Action(value = "standard_standardList", results = @Result(name = "standardList", type = "fastJson", params = {
-			"includeProperties", "name" }))
+	@Action(value = "standard_standardList")
 	public String standardList() throws Exception {
-		List<Standard> list = getService().getStandardService().standardList();
-		push(list);
-		return "standardList";
+		String list = getService().getStandardService().standardList();
+		writeJsonOut(list);
+		return NONE;
 	}
 
 }

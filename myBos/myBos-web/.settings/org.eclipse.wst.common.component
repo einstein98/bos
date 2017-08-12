@@ -16,10 +16,10 @@
         <dependent-module archiveName="myBos-exception-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/myBos-exception/myBos-exception">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="myBos-redis-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/myBos-redis/myBos-redis">
+        <dependent-module archiveName="myBos-utils-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/myBos-utils/myBos-utils">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="myBos-utils-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/myBos-utils/myBos-utils">
+        <dependent-module archiveName="myBos-redis-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/myBos-redis/myBos-redis">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="myBos-web"/>
