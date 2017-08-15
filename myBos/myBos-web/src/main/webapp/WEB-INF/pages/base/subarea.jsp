@@ -55,7 +55,7 @@
 	}
 	
 	function doExport(){
-		$('#searchSubareaForm').form('submit',{url:'${pageContext.request.contextPath}/subarea_export'});
+		$('#searchSubareaForm').form('submit',{url:'${pageContext.request.contextPath}/subarea_export.action'});
 	}
 	
 	function doImport(){
@@ -243,12 +243,12 @@
 			pageList: [2,4,8,16],
 			pagination : true,
 			toolbar : toolbar,
-			url : "${pageContext.request.contextPath}/subarea_getPage",
+			url : "${pageContext.request.contextPath}/subarea_getPage.action",
 			idField : 'id',
 			columns : columns,
 			onDblClickRow : doDblClickRow,
 			onAfterEdit : function(rowIndex, rowData) {
-				$.post('${pageContext.request.contextPath}/subarea_updateSubarea',rowData,function (){
+				$.post('${pageContext.request.contextPath}/subarea_updateSubarea.action',rowData,function (){
 					$('#grid').datagrid('reload');
 					$.messager.alert('成功','数据修改成功','info');
 				});
@@ -317,7 +317,7 @@
 							Id:value,
 							oldId:subareaId
 						},
-						url:'${pageContext.request.contextPath}/subarea_checkId',
+						url:'${pageContext.request.contextPath}/subarea_checkId.action',
 						type:'POST',
 						timeout:1000,
 						success:function(data) {

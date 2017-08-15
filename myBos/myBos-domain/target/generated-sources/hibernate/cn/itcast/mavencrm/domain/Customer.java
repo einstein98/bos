@@ -1,5 +1,5 @@
 package cn.itcast.mavencrm.domain;
-// Generated 2017-8-10 19:52:50 by Hibernate Tools 3.2.2.GA
+// Generated 2017-8-14 21:54:52 by Hibernate Tools 3.2.2.GA
 
 
 import javax.persistence.Column;
@@ -25,22 +25,25 @@ public class Customer  implements java.io.Serializable {
      private String address;
      private String station;
      private String decidedzoneId;
+     private String email;
+     private String password;
 
     public Customer() {
     }
 
 	
-    public Customer(String name, String telephone, String address) {
+    public Customer(String name, String telephone) {
         this.name = name;
         this.telephone = telephone;
-        this.address = address;
     }
-    public Customer(String name, String telephone, String address, String station, String decidedzoneId) {
+    public Customer(String name, String telephone, String address, String station, String decidedzoneId, String email, String password) {
        this.name = name;
        this.telephone = telephone;
        this.address = address;
        this.station = station;
        this.decidedzoneId = decidedzoneId;
+       this.email = email;
+       this.password = password;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -72,7 +75,7 @@ public class Customer  implements java.io.Serializable {
         this.telephone = telephone;
     }
     
-    @Column(name="ADDRESS", nullable=false)
+    @Column(name="ADDRESS")
     public String getAddress() {
         return this.address;
     }
@@ -97,6 +100,24 @@ public class Customer  implements java.io.Serializable {
     
     public void setDecidedzoneId(String decidedzoneId) {
         this.decidedzoneId = decidedzoneId;
+    }
+    
+    @Column(name="EMAIL", length=50)
+    public String getEmail() {
+        return this.email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    @Column(name="PASSWORD", length=20)
+    public String getPassword() {
+        return this.password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 

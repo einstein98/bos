@@ -58,6 +58,13 @@ public class SubareaAction extends BaseAction<Subarea> {
 		return NONE;
 	}
 
+	@Action("subarea_getSubareaByDecidedzoneId")
+	public String getSubareaByDecidedzoneId() throws Exception {
+		String pageInJson = getService().getSubareaService().getSubareaByDecidedzoneId(getModel());
+		writeJsonOut(pageInJson);
+		return NONE;
+	}
+
 	@Action("subarea_export")
 	public String export() throws Exception {
 		HSSFWorkbook book = getService().getSubareaService().export(getModel());

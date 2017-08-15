@@ -1,7 +1,9 @@
 package domain;
-// Generated 2017-8-10 19:52:50 by Hibernate Tools 3.2.2.GA
+// Generated 2017-8-14 21:54:52 by Hibernate Tools 3.2.2.GA
 
 
+import domain.qp.Order;
+import domain.qp.WorkBill;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -33,7 +35,9 @@ public class Staff  implements java.io.Serializable {
      private Integer deltag;
      private String station;
      private String standard;
+     private Set<Order> orders = new HashSet<Order>(0);
      private Set<DecidedZone> decidedZones = new HashSet<DecidedZone>(0);
+     private Set<WorkBill> workBills = new HashSet<WorkBill>(0);
 
     public Staff() {
     }
@@ -42,14 +46,16 @@ public class Staff  implements java.io.Serializable {
     public Staff(String telephone) {
         this.telephone = telephone;
     }
-    public Staff(String name, String telephone, Integer haspda, Integer deltag, String station, String standard, Set<DecidedZone> decidedZones) {
+    public Staff(String name, String telephone, Integer haspda, Integer deltag, String station, String standard, Set<Order> orders, Set<DecidedZone> decidedZones, Set<WorkBill> workBills) {
        this.name = name;
        this.telephone = telephone;
        this.haspda = haspda;
        this.deltag = deltag;
        this.station = station;
        this.standard = standard;
+       this.orders = orders;
        this.decidedZones = decidedZones;
+       this.workBills = workBills;
     }
    
      @GenericGenerator(name="generator", strategy="uuid")@Id @GeneratedValue(generator="generator")
@@ -117,12 +123,28 @@ public class Staff  implements java.io.Serializable {
         this.standard = standard;
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="staff")
+    public Set<Order> getOrders() {
+        return this.orders;
+    }
+    
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="staff")
     public Set<DecidedZone> getDecidedZones() {
         return this.decidedZones;
     }
     
     public void setDecidedZones(Set<DecidedZone> decidedZones) {
         this.decidedZones = decidedZones;
+    }
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="staff")
+    public Set<WorkBill> getWorkBills() {
+        return this.workBills;
+    }
+    
+    public void setWorkBills(Set<WorkBill> workBills) {
+        this.workBills = workBills;
     }
 
 

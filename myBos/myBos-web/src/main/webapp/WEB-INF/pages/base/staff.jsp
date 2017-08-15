@@ -47,7 +47,7 @@
 				ids.push(selections[i].id);
 			}
 			var idStr = ids.join(',');
-			$.post('${pageContext.request.contextPath}/staff_batchDelete',{ids:idStr},function() {
+			$.post('${pageContext.request.contextPath}/staff_batchDelete.action',{ids:idStr},function() {
 				$.messager.alert('成功','数据删除成功','info');
 				$('#grid').datagrid('reload');
 			})
@@ -65,7 +65,7 @@
 				ids.push(selections[i].id);
 			}
 			var idStr = ids.join(',');
-			$.post('${pageContext.request.contextPath}/staff_batchRevert',{ids:idStr},function() {
+			$.post('${pageContext.request.contextPath}/staff_batchRevert.action',{ids:idStr},function() {
 				$.messager.alert('成功','数据还原成功','info');
 				$('#grid').datagrid('reload');
 			})
@@ -157,7 +157,7 @@
 			pageList: [2,4,8],
 			pagination : true,
 			toolbar : toolbar,
-			url : "${pageContext.request.contextPath}/staff_getPage",
+			url : "${pageContext.request.contextPath}/staff_getPage.action",
 			idField : 'id',
 			columns : columns,
 			onDblClickRow : doDblClickRow
@@ -238,7 +238,7 @@
 							telephone:value,
 							id:$('#staffId').val()
 						},
-						url:'${pageContext.request.contextPath}/staff_checkTel',
+						url:'${pageContext.request.contextPath}/staff_checkTel.action',
 						type:'POST',
 						timeout:1000,
 						success:function(data) {
@@ -253,7 +253,7 @@
 		}); 
 		
 		$('.deliverStandard').combobox({ 
-			url:'${pageContext.request.contextPath}/standard_standardList', 
+			url:'${pageContext.request.contextPath}/standard_standardList.action', 
 			valueField:'name', 
 			textField:'name' 
 		});

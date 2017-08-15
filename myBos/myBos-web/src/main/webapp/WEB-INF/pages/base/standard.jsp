@@ -45,7 +45,7 @@
 					pageList: [2,4,8],
 					pagination : true,
 					toolbar : toolbar,
-					url : "${pageContext.request.contextPath}/standard_getPage",
+					url : "${pageContext.request.contextPath}/standard_getPage.action",
 					idField : 'id',
 					columns : columns,
 					onDblClickRow : onDblClickRow
@@ -115,7 +115,7 @@
 							ids.push(selections[i].id);
 						}
 						var idStr = ids.join(',');
-						$.post('${pageContext.request.contextPath}/standard_batchDelete',{ids:idStr},function() {
+						$.post('${pageContext.request.contextPath}/standard_batchDelete.action',{ids:idStr},function() {
 							$.messager.alert('成功','数据删除成功','info');
 							$('#grid').datagrid('reload');
 						})
@@ -135,7 +135,7 @@
 							ids.push(selections[i].id);
 						}
 						var idStr = ids.join(',');
-						$.post('${pageContext.request.contextPath}/standard_batchRevert',{ids:idStr},function() {
+						$.post('${pageContext.request.contextPath}/standard_batchRevert.action',{ids:idStr},function() {
 							$.messager.alert('成功','数据还原成功','info');
 							$('#grid').datagrid('reload');
 						})

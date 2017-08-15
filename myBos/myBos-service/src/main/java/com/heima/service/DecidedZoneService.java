@@ -11,7 +11,7 @@ import com.heima.domain.DecidedZone;
  */
 public interface DecidedZoneService {
 
-	Page getPage(DecidedZone model, PageRequest pageRequest);
+	Page getPage(DecidedZone model, PageRequest pageRequest, String hasDecidedzone);
 
 	boolean checkId(String oldId, String newId);
 

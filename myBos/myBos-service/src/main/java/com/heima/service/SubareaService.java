@@ -23,4 +23,6 @@ public interface SubareaService {
 
 	HSSFWorkbook export(Subarea subarea);
 
+	String getSubareaByDecidedzoneId(Subarea subarea);
+
 }

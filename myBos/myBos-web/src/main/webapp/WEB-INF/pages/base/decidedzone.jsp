@@ -10,6 +10,8 @@
 	src="${pageContext.request.contextPath }/js/jquery-1.8.3.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/js/jquery.form.min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/js/serializeJson.js"></script>
 <!-- 导入easyui类库 -->
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath }/js/easyui/themes/default/easyui.css">
@@ -47,7 +49,24 @@
 	}
 	
 	function doAssociations(){
+		$("#associationSelect option:enabled").remove();
+		$('#noassociationSelect option:enabled').remove();
+		var selected = $('#grid').datagrid('getSelected');
+		if(selected==null) {
+			$.messager.alert('错误','请先选择定区','error');
+			return;
+		}
 		$('#customerWindow').window('open');
+		$.post('${pageContext.request.contextPath}/decidedzone_getAssociatedCust.action',{id:selected.id},function(data) {
+			$(data).each(function() {
+				$('#associationSelect').append("<option value='" + this.id + "'>" + this.name + "</option>");
+			})
+		});
+		$.post('${pageContext.request.contextPath}/decidedzone_getNoAssociatedCust.action',{id:selected.id},function(data) {
+			$(data).each(function() {
+				$('#noassociationSelect').append("<option value='" + this.id + "'>" + this.name + "</option>");
+			})
+		});
 	}
 	
 	//工具栏
@@ -79,6 +98,8 @@
 	}];
 	// 定义列
 	var columns = [ [ {
+		checkbox : true
+	},{
 		field : 'id',
 		title : '定区编号',
 		width : 120,
@@ -128,10 +149,11 @@
 			pageList: [30,50,100],
 			pagination : true,
 			toolbar : toolbar,
-			url : "${pageContext.request.contextPath}/decidedzone_getPage",
+			url : "${pageContext.request.contextPath}/decidedzone_getPage.action",
 			idField : 'id',
 			columns : columns,
-			onDblClickRow : doDblClickRow
+			onDblClickRow : doDblClickRow,
+			singleSelect : true
 		});
 		
 		// 添加、修改定区
@@ -156,7 +178,8 @@
 	        resizable:false
 	    });
 		$("#btn").click(function(){
-			alert("执行查询...");
+			$('#grid').datagrid('load',$('#searchDecidedzoneForm').serializeJson());
+			$('#searchWindow').window('close');
 		});
 		
 		$('#save').click(function() {
@@ -181,7 +204,7 @@
 							newId:value,
 							oldId:decidedZoneId
 						},
-						url:'${pageContext.request.contextPath}/decidedZone_checkId',
+						url:'${pageContext.request.contextPath}/decidedZone_checkId.action',
 						type:'POST',
 						timeout:1000,
 						success:function(data) {
@@ -194,18 +217,35 @@
 			} 
 		}); 
 
-
+		$("#toRight").click(function(){
+			$('#associationSelect').append($('#noassociationSelect option:selected'));
+		}) 
+		$("#toLeft").click(function(){
+			$('#noassociationSelect').append($('#associationSelect option:selected'));
+		}) 
+		$("#allToRight").click(function(){
+			$('#associationSelect').append($('#noassociationSelect option:enabled'));
+		}) 
+		$("#allToLeft").click(function(){
+			$('#noassociationSelect').append($('#associationSelect option:enabled'));
+		}) 
+		
+		$('#associationBtn').click(function() {
+			$('#associationSelect option:enabled').attr("selected","selected");
+			$('#customerDecidedZoneId').val($('#grid').datagrid('getSelected').id)
+			$('#customerForm').ajaxSubmit();
+			$('#customerWindow').window('close');
+		});
 		
 	});
 
-	function doDblClickRow(){
-		alert("双击表格数据...");
+	function doDblClickRow(rowIndex, rowData){
 		$('#association_subarea').datagrid( {
 			fit : true,
 			border : true,
 			rownumbers : true,
 			striped : true,
-			url : "json/association_subarea.json",
+			url : "${pageContext.request.contextPath}/subarea_getSubareaByDecidedzoneId.action?decidedZone.id=" +rowData.id,
 			columns : [ [{
 				field : 'id',
 				title : '分拣编号',
@@ -254,7 +294,18 @@
 				field : 'single',
 				title : '单双号',
 				width : 100,
-				align : 'center'
+				align : 'center',
+				formatter: function(value){
+			        if (value=='0'){
+			            return '单双号';
+			        } else if(value=='1') {
+			            return '单号';
+			        } else if(value=='2') {
+			        	return '双号';
+			        } else {
+			        	return '数据错误';
+			        }	
+				}
 			} , {
 				field : 'position',
 				title : '位置',
@@ -262,12 +313,13 @@
 				align : 'center'
 			} ] ]
 		});
+		
 		$('#association_customer').datagrid( {
 			fit : true,
 			border : true,
 			rownumbers : true,
 			striped : true,
-			url : "json/association_customer.json",
+			url : "${pageContext.request.contextPath}/decidedzone_getAssociatedCust.action?id="+rowData.id,
 			columns : [[{
 				field : 'id',
 				title : '客户编号',
@@ -285,6 +337,7 @@
 				align : 'center'
 			}]]
 		});
+		
 		
 	}
 </script>	
@@ -356,25 +409,28 @@
 	<!-- 查询定区 -->
 	<div class="easyui-window" title="查询定区窗口" id="searchWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 		<div style="overflow:auto;padding:5px;" border="false">
-			<form>
+			<form id="searchDecidedzoneForm">
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
 						<td colspan="2">查询条件</td>
 					</tr>
 					<tr>
 						<td>定区编码</td>
-						<td><input type="text" name="id" class="easyui-validatebox" required="true"/></td>
+						<td><input type="text" name="id"/></td>
 					</tr>
 					<tr>
 						<td>所属单位</td>
-						<td><input type="text" name="staff.station" class="easyui-validatebox" required="true"/></td>
+						<td><input type="text" name="staff.station"/></td>
 					</tr>
 					<tr>
 						<td>是否关联分区</td>
-						<td><input type="text" name="subareaName" class="easyui-validatebox" required="true"/></td>
+						<td>
+							<input type="radio" name="hasDecidedzone" value="1"/>是
+							<input type="radio" name="hasDecidedzone" value="2"/>否
+						</td>
 					</tr>
 					<tr>
-						<td colspan="2"><a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a> </td>
+						<td colspan="2"><a id="btn" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a> </td>
 					</tr>
 				</table>
 			</form>
@@ -384,7 +440,7 @@
 	<!-- 关联客户窗口 -->
 	<div class="easyui-window" title="关联客户窗口" id="customerWindow" collapsible="false" closed="true" minimizable="false" maximizable="false" style="top:20px;left:200px;width: 400px;height: 300px;">
 		<div style="overflow:auto;padding:5px;" border="false">
-			<form id="customerForm" action="${pageContext.request.contextPath }/decidedzone_assigncustomerstodecidedzone.action" method="post">
+			<form id="customerForm" action="${pageContext.request.contextPath }/decidedzone_setCustomersToDecidedzone" method="post">
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
 						<td colspan="3">关联客户</td>
@@ -392,18 +448,24 @@
 					<tr>
 						<td>
 							<input type="hidden" name="id" id="customerDecidedZoneId" />
-							<select id="noassociationSelect" multiple="multiple" size="10"></select>
+							<select id="noassociationSelect" multiple="multiple" size="10">
+								<option disabled="disabled">未关联定区用户</option>
+							</select>
 						</td>
 						<td>
-							<input type="button" value="》》" id="toRight"><br/>
-							<input type="button" value="《《" id="toLeft">
+							<input type="button" value="--》" id="toRight"><br/>
+							<input type="button" value="---》" id="allToRight"><br/>
+							<input type="button" value="《---" id="allToLeft"><br/>
+							<input type="button" value="《--" id="toLeft">
 						</td>
 						<td>
-							<select id="associationSelect" name="customerIds" multiple="multiple" size="10"></select>
+							<select id="associationSelect" name="customerIds" multiple="multiple" size="10">
+								<option disabled="disabled">本定区关联用户</option>
+							</select>
 						</td>
 					</tr>
 					<tr>
-						<td colspan="3"><a id="associationBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">关联客户</a> </td>
+						<td colspan="3"><a id="associationBtn" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-save'">关联客户</a> </td>
 					</tr>
 				</table>
 			</form>

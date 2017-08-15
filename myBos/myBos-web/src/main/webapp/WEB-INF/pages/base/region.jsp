@@ -117,7 +117,7 @@
 			pageList: [10,20,30],
 			pagination : true,
 			toolbar : toolbar,
-			url : "${pageContext.request.contextPath}/region_getPage",
+			url : "${pageContext.request.contextPath}/region_getPage.action",
 			idField : 'id',
 			columns : columns,
 			onDblClickRow : doDblClickRow
@@ -184,7 +184,7 @@
 							code:value,
 							id:regionId
 						},
-						url:'${pageContext.request.contextPath}/region_checkId',
+						url:'${pageContext.request.contextPath}/region_checkId.action',
 						type:'POST',
 						timeout:1000,
 						success:function(data) {
@@ -205,7 +205,7 @@
 							code:value,
 							id:regionId
 						},
-						url:'${pageContext.request.contextPath}/region_checkPostcode',
+						url:'${pageContext.request.contextPath}/region_checkPostcode.action',
 						type:'POST',
 						timeout:1000,
 						success:function(data) {
@@ -220,7 +220,7 @@
 		
 		$('#button-import').upload({
 			name: 'upload',
-	        action: '${pageContext.request.contextPath}/region_upload',
+	        action: '${pageContext.request.contextPath}/region_upload.action',
 	        enctype: 'multipart/form-data',
 	        onSelect: function() {
 	        	this.autoSubmit=false;

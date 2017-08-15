@@ -30,6 +30,7 @@ import com.heima.domain.DecidedZone;
 import com.heima.domain.Region;
 import com.heima.domain.Subarea;
 import com.heima.service.SubareaService;
+import com.heima.utils.FastJSONUtils;
 import com.heima.utils.MyUtils;
 
 /**
@@ -242,5 +243,18 @@ public class SubareaServiceImpl implements SubareaService {
 		}
 
 		return book;
+	}
+
+	@Override
+	public String getSubareaByDecidedzoneId(Subarea subarea) {
+		String key = "subarea_decidedzoneId_" + subarea.getDecidedZone().getId();
+		String subareaList = template.opsForValue().get(key);
+		if (MyUtils.isNotBlank(subareaList)) {
+			return subareaList;
+		}
+		List<Subarea> list = subareaDao.findByDecidedZone(subarea.getDecidedZone());
+		String json = FastJSONUtils.toJSON(list);
+		template.opsForValue().set(key, json);
+		return json;
 	}
 }

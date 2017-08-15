@@ -5,12 +5,14 @@
 <!--  定义生成实体类规范  match-table 需要将那些表生成实体类   match-catalog 操作是哪一个数据库 -->
   <schema-selection  match-table="t_user"  match-catalog="mybos"/>
   <schema-selection  match-table="t_standard"  match-catalog="mybos"/>
+  <schema-selection  match-table="t_order"  match-catalog="mybos"/>
+  <schema-selection  match-table="t_workbill"  match-catalog="mybos"/>
   <!-- 正则表达式 .表示任意字符 * 0或者多个字符 -->
   <schema-selection  match-table="bc_.*"  match-catalog="mybos"/>
   <!-- 反向生成Customer -->
 <schema-selection  match-table="customers"  match-catalog="mybos"/>
-  <!-- <schema-selection  match-table="qp_.*"  match-catalog="mybos"/>
-  权限表生成
+  <schema-selection  match-table="qp_.*"  match-catalog="mybos"/>
+  <!-- 权限表生成
   <schema-selection  match-table="auth_.*"  match-catalog="mybos"/>
   <schema-selection  match-table="role_function"  match-catalog="mybos"/>
   <schema-selection  match-table="role_menu"  match-catalog="mybos"/>
@@ -68,24 +70,18 @@
   
   
   <!-- 取派模块 -->
-<!--     <table name="qp_noticebill" catalog="mybos"
-		class="cn.itcast.mybos.domain.qp.NoticeBill">
-		<primary-key>
-			<generator class="uuid"></generator>
-		</primary-key>
+    <table name="t_order" catalog="mybos"
+		class="domain.qp.Order">
 	</table>
-    <table name="qp_workbill" catalog="mybos"
-		class="cn.itcast.mybos.domain.qp.WorkBill">
-		<primary-key>
-			<generator class="uuid"></generator>
-		</primary-key>
+    <table name="t_workbill" catalog="mybos"
+		class="domain.qp.WorkBill">
 	</table>
     <table name="qp_workordermanage" catalog="mybos"
-		class="cn.itcast.mybos.domain.qp.WorkOrderManage">
+		class="domain.qp.WorkOrderManage">
 		<primary-key>
 			<generator class="uuid"></generator>
 		</primary-key>
-	</table> -->
+	</table>
 	
 	
 	

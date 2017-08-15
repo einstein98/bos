@@ -1,5 +1,5 @@
 package domain;
-// Generated 2017-8-10 19:52:50 by Hibernate Tools 3.2.2.GA
+// Generated 2017-8-14 21:54:52 by Hibernate Tools 3.2.2.GA
 
 
 import javax.persistence.Column;
